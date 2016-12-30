@@ -19,6 +19,8 @@ func Do(c io.Closer, msg ...error) {
 	fmt.Fprintf(os.Stderr, "%+v\n", err)
 }
 
-func WithStackStrace() error {
-	return errors.New("Error closing in defer")
+func WithStackStrace(c io.Closer) func() {
+	return func() {
+		Do(c, errors.New("Error closing in defer"))
+	}
 }
